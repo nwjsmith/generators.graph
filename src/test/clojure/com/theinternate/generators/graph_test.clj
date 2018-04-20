@@ -9,14 +9,14 @@
   (set (gen/sample gen 100)))
 
 (deftest gen-directed-acyclic-graph-test
-  (is (= #{{:a #{} :b #{} :c #{:b}}
-           {:a #{} :b #{:a} :c #{}}
-           {:a #{} :b #{} :c #{}}
-           {:a #{} :b #{:a} :c #{:a}}
-           {:a #{} :b #{} :c #{:b :a}}
-           {:a #{} :b #{:a} :c #{:b}}
-           {:a #{} :b #{:a} :c #{:b :a}}
-           {:a #{} :b #{} :c #{:a}}}
+  (is (= #{{:a #{} :b #{} :c #{}}
+           {:a #{} :b #{:c} :c #{}}
+           {:a #{:b} :b #{} :c #{}}
+           {:a #{:b} :b #{:c} :c #{}}
+           {:a #{:c} :b #{} :c #{}}
+           {:a #{:c} :b #{:c} :c #{}}
+           {:a #{:b :c} :b #{} :c #{}}
+           {:a #{:b :c} :b #{:c} :c #{}}}
          (sample-set (gen.graph/gen-directed-acyclic-graph [:a :b :c])))))
 
 (deftest gen-topological-ordering-test

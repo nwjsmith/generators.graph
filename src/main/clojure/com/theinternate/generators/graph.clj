@@ -48,7 +48,7 @@
   Daniel et al. Random Graph Generation for Scheduling Simulations."
   [vertex-count]
   (gen/fmap (fn [probability-matrix]
-              (map-vertices #(< 0.5 %) probability-matrix))
+              (map-vertices (partial < 0.5) probability-matrix))
             (gen-acyclic-probability-matrix vertex-count)))
 
 (defn- directed-graph
@@ -57,7 +57,7 @@
   [vertices matrix]
   (reduce (fn [m [row column :as coordinates]]
             (if (get-in matrix coordinates)
-              (update m (nth vertices row) conj (nth vertices column))
+              (update m (nth vertices column) conj (nth vertices row))
               m))
           (zipmap vertices (repeat #{}))
           (for [row (range 0 (count vertices))
