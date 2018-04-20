@@ -29,6 +29,14 @@
 (def ^:private gen-probability
   (gen/double* {:min 0.0 :max 1.0 :NaN? false}))
 
+(def ^:private gen-zero-probability
+  (gen/return 0.0))
+
+(defn- adjacent?
+  "Returns true if the probability indicates the vertices are adjacent"
+  [probability]
+  (< 0.5 probability))
+
 (defn- gen-acyclic-probability-matrix
   "Generates a matrix containing a probability of there being an edge between
   two vertices. The generated matrix will not contain any cycles. It will
@@ -39,7 +47,7 @@
               (map-vertices-indexed (fn [row col _]
                                       (if (< col row)
                                         gen-probability
-                                        (gen/return 0.0)))
+                                        gen-zero-probability))
                                     (empty-matrix vertex-count)))))
 
 (defn- gen-acyclic-adjacency-matrix
@@ -48,7 +56,7 @@
   Daniel et al. Random Graph Generation for Scheduling Simulations."
   [vertex-count]
   (gen/fmap (fn [probability-matrix]
-              (map-vertices (partial < 0.5) probability-matrix))
+              (map-vertices adjacent? probability-matrix))
             (gen-acyclic-probability-matrix vertex-count)))
 
 (defn- directed-graph
