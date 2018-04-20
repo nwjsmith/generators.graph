@@ -4,18 +4,35 @@
             [com.theinternate.generators.graph :as gen.graph]))
 
 (defn- sample-set
-  "Returns the set of values realized from a sampling the generator 100 times."
+  "Returns the set of values realized from a sampling the generator 1000 times."
   [gen]
-  (set (gen/sample gen 100)))
+  (set (gen/sample gen 1000)))
 
 (deftest gen-directed-acyclic-graph-test
   (is (= #{{:a #{} :b #{} :c #{}}
+           {:a #{} :b #{} :c #{:a}}
+           {:a #{} :b #{} :c #{:b}}
+           {:a #{} :b #{} :c #{:a :b}}
+           {:a #{} :b #{:a} :c #{}}
+           {:a #{} :b #{:a} :c #{:a}}
+           {:a #{} :b #{:a} :c #{:b}}
+           {:a #{} :b #{:a} :c #{:a :b}}
            {:a #{} :b #{:c} :c #{}}
+           {:a #{} :b #{:c} :c #{:a}}
+           {:a #{} :b #{:a :c} :c #{}}
+           {:a #{} :b #{:a :c} :c #{:a}}
            {:a #{:b} :b #{} :c #{}}
+           {:a #{:b} :b #{} :c #{:a}}
+           {:a #{:b} :b #{} :c #{:b}}
+           {:a #{:b} :b #{} :c #{:a :b}}
            {:a #{:b} :b #{:c} :c #{}}
            {:a #{:c} :b #{} :c #{}}
+           {:a #{:c} :b #{} :c #{:b}}
+           {:a #{:c} :b #{:a} :c #{}}
            {:a #{:c} :b #{:c} :c #{}}
+           {:a #{:c} :b #{:a :c} :c #{}}
            {:a #{:b :c} :b #{} :c #{}}
+           {:a #{:b :c} :b #{} :c #{:b}}
            {:a #{:b :c} :b #{:c} :c #{}}}
          (sample-set (gen.graph/gen-directed-acyclic-graph [:a :b :c])))))
 

@@ -75,8 +75,10 @@
 (defn gen-directed-acyclic-graph
   "Generates a random directed, acyclic graph containing the given vertices."
   [vertices]
-  (gen/fmap (fn [matrix] (directed-graph vertices matrix))
-            (gen-acyclic-adjacency-matrix (count vertices))))
+  (gen/fmap (fn [[shuffled-vertices matrix]]
+              (directed-graph shuffled-vertices matrix))
+            (gen/tuple (gen/shuffle vertices)
+                       (gen-acyclic-adjacency-matrix (count vertices)))))
 
 (defn- vertices
   "Returns a set containing all of the directed graph's vertices."
