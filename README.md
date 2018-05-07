@@ -1,6 +1,6 @@
 # generators.graph
 
-`generators.graph` is a library of [`test.check`]() generators for generator graph data.
+`generators.graph` is a library of [`test.check`](https://github.com/clojure/test.check) generators for generator graph data.
 
 ## Usage
 
@@ -30,7 +30,7 @@ com.theinternate/generators.graph {:mvn/version "0.1.0"}
 
 ## License
 
-Copyright © 2017 Nathaniel Smith
+Copyright © 2018 Nathaniel Smith
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
 
