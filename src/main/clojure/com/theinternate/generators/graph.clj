@@ -157,11 +157,11 @@
 
 (defn gen-pruned-directed-acyclic-graph
   "Generates a subgraph of the directed, acyclic graph. Each of the subgraph's
-  vertices' dependencies are also in the graph. The subgraph will contain at
-  least the minimum number of vertices (default 0)."
+  vertices' ancestors are also in the graph. The subgraph will contain at least
+  the minimum number of vertices (default 0)."
   ([directed-acyclic-graph]
    (gen-pruned-directed-acyclic-graph directed-acyclic-graph 0))
-  ([directed-acyclic-graph minimum-vertex-count]
+  ([directed-acyclic-graph {:keys [minimum-vertex-count]}]
    (gen/bind
     (gen-topological-ordering directed-acyclic-graph)
     (fn [ordering]
