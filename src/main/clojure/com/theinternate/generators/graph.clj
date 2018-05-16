@@ -126,6 +126,7 @@
 (defn gen-topological-ordering
   "Generates a seq of all vertices in the directed, acyclic graph. The seq will
   be in topological order."
+  ;; TODO try contrib's combinatorics
   [directed-acyclic-graph]
   (let [vertex-count (count directed-acyclic-graph)]
     (gen/fmap
@@ -160,7 +161,8 @@
   vertices' ancestors are also in the graph. The subgraph will contain at least
   the minimum number of vertices (default 0)."
   ([directed-acyclic-graph]
-   (gen-pruned-directed-acyclic-graph directed-acyclic-graph 0))
+   (gen-pruned-directed-acyclic-graph directed-acyclic-graph
+                                      {:minimum-vertex-count 0}))
   ([directed-acyclic-graph {:keys [minimum-vertex-count]}]
    (gen/bind
     (gen-topological-ordering directed-acyclic-graph)
