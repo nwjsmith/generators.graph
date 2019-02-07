@@ -6,18 +6,7 @@
 (defn- sample-set
   "Returns the set of values realized from a sampling the generator 1000 times."
   [gen]
-  (set (gen/sample gen 1000)))
-
-(defn- mean
-  "Returns the mean of the collection of numbers."
-  [numbers]
-  (/ (reduce + numbers) (count numbers)))
-
-(defn- standard-deviation
-  "Returns the standard deviation of the collection of numbers."
-  [numbers]
-  (Math/sqrt (/ (reduce + (map #(Math/pow (- % (mean numbers)) 2) numbers))
-                (count numbers))))
+  (set (gen/sample gen 10000)))
 
 (deftest gen-directed-acyclic-graph-test
   (is (= #{{:a #{} :b #{} :c #{}}
@@ -64,21 +53,6 @@
                                                           :e #{:f}
                                                           :f #{}})))))
 
-(deftest gen-topological-ordering-uniformish-distribution-test
-  (let [sample (gen/sample (gen.graph/gen-topological-ordering {:a #{:b :c}
-                                                                :b #{:d}
-                                                                :c #{:d :e}
-                                                                :d #{}
-                                                                :e #{:f}
-                                                                :f #{}})
-                           1000)
-        counts (map val (frequencies sample))
-        deviation (standard-deviation counts)]
-    (is (every? #(< (- (mean counts) (* 2 deviation))
-                    %
-                    (+ (mean counts) (* 2 deviation)))
-                counts))))
-
 (deftest gen-pruned-directed-acyclic-graph-test
   (is (= #{{}
            {:a #{}}
@@ -98,3 +72,29 @@
                                                                    :d #{}
                                                                    :e #{:f}
                                                                    :f #{}})))))
+
+(defn- mean
+  "Returns the mean of the collection of numbers."
+  [numbers]
+  (/ (reduce + numbers) (count numbers)))
+
+(defn- standard-deviation
+  "Returns the standard deviation of the collection of numbers."
+  [numbers]
+  (Math/sqrt (/ (reduce + (map #(Math/pow (- % (mean numbers)) 2) numbers))
+                (count numbers))))
+
+(deftest gen-topological-ordering-distribution-test
+  (let [sample (gen/sample (gen.graph/gen-topological-ordering {:a #{:b :c}
+                                                                :b #{:d}
+                                                                :c #{:d :e}
+                                                                :d #{}
+                                                                :e #{:f}
+                                                                :f #{}})
+                           10000)
+        counts (map val (frequencies sample))
+        deviation (standard-deviation counts)]
+    (is (every? #(< (- (mean counts) (* 2 deviation))
+                    %
+                    (+ (mean counts) (* 2 deviation)))
+                counts))))
