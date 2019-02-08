@@ -40,6 +40,9 @@ jobs:
       - run:
           name: Test
           command: /code/bin/ci
+      - run:
+          name: Lint
+          command: clojure -A:lint
       - codecov/upload:
           file: /code/target/coverage/codecov.json
           flags: unit
