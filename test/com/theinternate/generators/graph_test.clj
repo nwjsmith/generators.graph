@@ -74,9 +74,9 @@
                            10000)
         counts (map val (frequencies sample))
         deviation (standard-deviation counts)]
-    (is (every? #(< (- (mean counts) (* 2 deviation))
+    (is (every? #(< (- (mean counts) (* 3 deviation))
                     %
-                    (+ (mean counts) (* 2 deviation)))
+                    (+ (mean counts) (* 3 deviation)))
                 counts))))
 
 (deftest gen-pruned-directed-acyclic-graph-test
