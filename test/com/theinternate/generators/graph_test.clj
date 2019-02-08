@@ -53,26 +53,6 @@
                                                           :e #{:f}
                                                           :f #{}})))))
 
-(deftest gen-pruned-directed-acyclic-graph-test
-  (is (= #{{}
-           {:a #{}}
-           {:a #{:b} :b #{}}
-           {:a #{:c} :c #{}}
-           {:a #{:c} :c #{:e} :e #{}}
-           {:a #{:c} :c #{:e} :e #{:f} :f #{}}
-           {:a #{:b :c} :b #{} :c #{}}
-           {:a #{:b :c} :b #{} :c #{:e} :e #{}}
-           {:a #{:b :c} :b #{} :c #{:e} :e #{:f} :f #{}}
-           {:a #{:b :c} :b #{:d} :c #{:d} :d #{}}
-           {:a #{:b :c} :b #{:d} :c #{:d :e} :d #{} :e #{}}
-           {:a #{:b :c} :b #{:d} :c #{:e :d} :d #{} :e #{:f} :f #{}}}
-         (sample-set (gen.graph/gen-pruned-directed-acyclic-graph {:a #{:b :c}
-                                                                   :b #{:d}
-                                                                   :c #{:d :e}
-                                                                   :d #{}
-                                                                   :e #{:f}
-                                                                   :f #{}})))))
-
 (defn- mean
   "Returns the mean of the collection of numbers."
   [numbers]
@@ -98,3 +78,23 @@
                     %
                     (+ (mean counts) (* 2 deviation)))
                 counts))))
+
+(deftest gen-pruned-directed-acyclic-graph-test
+  (is (= #{{}
+           {:a #{}}
+           {:a #{:b} :b #{}}
+           {:a #{:c} :c #{}}
+           {:a #{:c} :c #{:e} :e #{}}
+           {:a #{:c} :c #{:e} :e #{:f} :f #{}}
+           {:a #{:b :c} :b #{} :c #{}}
+           {:a #{:b :c} :b #{} :c #{:e} :e #{}}
+           {:a #{:b :c} :b #{} :c #{:e} :e #{:f} :f #{}}
+           {:a #{:b :c} :b #{:d} :c #{:d} :d #{}}
+           {:a #{:b :c} :b #{:d} :c #{:d :e} :d #{} :e #{}}
+           {:a #{:b :c} :b #{:d} :c #{:e :d} :d #{} :e #{:f} :f #{}}}
+         (sample-set (gen.graph/gen-pruned-directed-acyclic-graph {:a #{:b :c}
+                                                                   :b #{:d}
+                                                                   :c #{:d :e}
+                                                                   :d #{}
+                                                                   :e #{:f}
+                                                                   :f #{}})))))
