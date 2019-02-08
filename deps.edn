@@ -3,4 +3,6 @@
  :paths ["src"]
  :aliases {:dev {:extra-paths ["test"]}
            :test {:extra-deps {lambdaisland/kaocha {:mvn/version "0.0-389"}}
-                  :extra-paths ["test"]}}}
+                  :extra-paths ["test"]}
+           :ci {:extra-deps {lambdaisland/kaocha-cloverage {:mvn/version "0.0-22"}
+                             lambdaisland/kaocha-junit-xml {:mvn/version "0.0-53"}}}}}

@@ -1,0 +1,9 @@
+#!/bin/bash
+set -e
+
+exec clojure -A:test:ci \
+    -m kaocha.runner \
+    --plugin cloverage \
+    --cov-fail-threshold 99 \
+    --plugin kaocha.plugin/junit-xml \
+    --junit-xml-file target/junit.xml
