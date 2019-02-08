@@ -1,4 +1,4 @@
 #!/bin/sh
 set -e
 
-exec clojure -A:test -m kaocha.runner "$@"
+exec clojure -A:test --main kaocha.runner "$@"

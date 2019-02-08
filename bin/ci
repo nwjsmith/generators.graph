@@ -2,7 +2,7 @@
 set -e
 
 exec clojure -A:test:ci \
-    -m kaocha.runner \
+    --main kaocha.runner \
     --plugin cloverage \
     --cov-fail-threshold 99 \
     --plugin kaocha.plugin/junit-xml \
