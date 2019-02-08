@@ -16,13 +16,13 @@
         matrix))
 
 (defn- map-vertices
-  "Returns a matrix consisting of applying f to each entry."
+  "Returns a square matrix consisting of applying f to each entry."
   [f matrix]
   (map-vertices-indexed (fn [_ _ vertex] (f vertex)) matrix))
 
 (defn- empty-matrix
-  "Returns containing an entry with a `nil` value for each of the number of
-  vertices."
+  "Returns a square matrix containing an entry with a `nil` value for each of
+  the number of vertices."
   [vertex-count]
   (vec (repeat vertex-count (vec (repeat vertex-count nil)))))
 
@@ -126,7 +126,6 @@
 (defn gen-topological-ordering
   "Generates a seq of all vertices in the directed, acyclic graph. The seq will
   be in topological order."
-  ;; TODO try contrib's combinatorics
   [directed-acyclic-graph]
   (let [vertex-count (count directed-acyclic-graph)]
     (gen/fmap
