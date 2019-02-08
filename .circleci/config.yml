@@ -1,0 +1,56 @@
+version: 2.1
+
+references:
+  restore-maven-local-repository: &restore-maven-local-repository
+    restore_cache:
+      keys:
+        - v1-mvn-{{ checksum "deps.edn" }}-{{ checksum "pom.xml" }}
+        - v1-mvn-
+  save-maven-local-repository: &save-maven-local-repository
+    save_cache:
+      key: v1-mvn-{{ checksum "deps.edn" }}-{{ checksum "pom.xml" }}
+      paths:
+        - /root/.m2
+  restore-classpath-cache-directory: &restore-classpath-cache-directory
+    restore_cache:
+      keys:
+        - v1-cpcache-{{ checksum "deps.edn" }}
+        - v1-cpcache-
+  save-classpath-cache-directory: &save-classpath-cache-directory
+    save_cache:
+      key: v1-cpcache-{{ checksum "deps.edn" }}
+      paths:
+        - /code/.cpcache
+
+orbs:
+  codecov: codecov/codecov@1.0.1
+
+jobs:
+  build:
+    docker:
+      - image: clojure:tools-deps
+    working_directory: /code
+    steps:
+      - checkout
+      - *restore-maven-local-repository
+      - *restore-classpath-cache-directory
+      - run:
+          name: Download dependencies and compute CI classpath
+          command: clojure -Srepro -A:test:ci -Spath
+      - run:
+          name: Test
+          command: /code/bin/ci
+      - codecov/upload:
+          file: /code/target/coverage/codecov.json
+          flags: unit
+      - store_test_results:
+          path: test_results
+      - *save-classpath-cache-directory
+      - *save-maven-local-repository
+
+workflows:
+  version: 2
+  pipeline:
+    jobs:
+      - build:
+          context: generators.graph
