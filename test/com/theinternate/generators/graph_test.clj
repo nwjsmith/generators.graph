@@ -6,7 +6,7 @@
 (defn- sample-set
   "Returns the set of values realized from a sampling the generator 1000 times."
   [gen]
-  (set (gen/sample gen 10000)))
+  (set (gen/sample gen 1000)))
 
 (deftest gen-directed-acyclic-graph-test
   (is (= #{{:a #{} :b #{} :c #{}}
@@ -71,7 +71,7 @@
                                                                 :d #{}
                                                                 :e #{:f}
                                                                 :f #{}})
-                           10000)
+                           1000)
         counts (map val (frequencies sample))
         deviation (standard-deviation counts)]
     (is (every? #(< (- (mean counts) (* 3 deviation))
