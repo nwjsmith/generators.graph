@@ -129,19 +129,17 @@
   [directed-acyclic-graph]
   (let [vertex-count (count directed-acyclic-graph)]
     (gen/fmap
-     (fn [random-numbers]
-       (reduce (fn [ordered-vertices random-number]
-                 (if (and (< random-number (dec vertex-count))
-                          (not (parent? directed-acyclic-graph
-                                        (nth ordered-vertices random-number)
-                                        (nth ordered-vertices
-                                             (inc random-number)))))
-                   (interchange ordered-vertices
-                                random-number
-                                (inc random-number))
-                   ordered-vertices))
+     (fn [random-indices]
+       (reduce (fn [ordered-vertices random-index]
+                 (let [next-index (inc random-index)]
+                   (if (and (< next-index vertex-count)
+                            (not (parent? directed-acyclic-graph
+                                          (nth ordered-vertices random-index)
+                                          (nth ordered-vertices next-index))))
+                     (interchange ordered-vertices random-index next-index)
+                     ordered-vertices)))
                (topological-ordering directed-acyclic-graph)
-               random-numbers))
+               random-indices))
      (gen/vector (gen/choose 0 (dec vertex-count))
                  (* 10 (Math/pow vertex-count 2))))))
 
