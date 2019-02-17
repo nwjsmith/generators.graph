@@ -51,7 +51,19 @@ EOS
 
 mvn deploy
 
-ed < bin/add-changelog-placeholders.ed
+cat <<-EOS | ed CHANGELOG.md
+1i
+# Unreleased
+
+## Added
+
+## Fixed
+
+## Changed
+
+.
+wq
+EOS
 
 git add CHANGELOG.md pom.xml
 git commit -m 'Add CHANGELOG placeholders and update pom.xml'
