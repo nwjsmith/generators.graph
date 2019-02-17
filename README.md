@@ -7,13 +7,13 @@
 **tools.deps**
 
 ```clojure
-com.theinternate/generators.graph {:mvn/version "0.1.0"}
+com.theinternate/generators.graph {:mvn/version "0.0-27"}
 ```
 
 **Leiningen/Boot**
 
 ```clojure
-[com.theinternate/generators.graph "0.1.0"]
+[com.theinternate/generators.graph "0.0-27"]
 ```
 
 **Maven**
@@ -22,7 +22,7 @@ com.theinternate/generators.graph {:mvn/version "0.1.0"}
 <dependency>
   <groupId>com.theinternate</groupId>
   <artifactId>generators.graph</artifactId>
-  <version>0.1.0</version>
+  <version>0.0-27</version>
 </dependency>
 ```
 

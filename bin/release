@@ -1,0 +1,12 @@
+#!/bin/bash
+set -e
+
+git clean -x -d --force -e bin/
+
+VERSION="0.0-$(git rev-list --count HEAD)"
+
+echo "Bumping version to ${VERSION}"
+
+sed -i '' 's/com\.theinternate\/generators\.graph {:mvn\/version "[^"]*"}/com.theinternate\/generators.graph {:mvn\/version "'"${VERSION}"'"}/' README.md
+sed -i '' 's/\[com\.theinternate\/generators\.graph "[^"]*"\]/[com.theinternate\/generators.graph "'"${VERSION}"'"]/' README.md
+sed -i '' 's/<version>[^<]*<\/version>/<version>'"${VERSION}"'<\/version>/' README.md
