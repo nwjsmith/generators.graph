@@ -1,6 +1,16 @@
 #!/bin/bash
 set -e
 
+if [[ -n "$(git status --porcelain)" ]]; then
+    echo "Repo not clean.
+    Status:
+$(git status --short)
+    Diff:
+$(git diff)"
+
+    exit 1
+fi
+
 git clean -x -d --force -e bin/
 
 VERSION="0.0-$(git rev-list --count HEAD)"
@@ -10,3 +20,39 @@ echo "Bumping version to ${VERSION}"
 sed -i '' 's/com\.theinternate\/generators\.graph {:mvn\/version "[^"]*"}/com.theinternate\/generators.graph {:mvn\/version "'"${VERSION}"'"}/' README.md
 sed -i '' 's/\[com\.theinternate\/generators\.graph "[^"]*"\]/[com.theinternate\/generators.graph "'"${VERSION}"'"]/' README.md
 sed -i '' 's/<version>[^<]*<\/version>/<version>'"${VERSION}"'<\/version>/' README.md
+
+cat <<-EOS | ed CHANGELOG.md
+1d
+1i
+# ${VERSION} ($(date --rfc-3339=date) / $(git rev-parse --short HEAD))
+.
+wq
+EOS
+
+git add -A
+git commit -m "Release v${VERSION}"
+git tag "v${VERSION}"
+
+git show "v${VERSION}"
+git push --tags
+
+cat <<-EOS | ed pom.xml
+/<version>/
+s/<version>.*<\/version>/<version>${VERSION}<\/version>
+
+/<scm>/
+/<tag>/
+s/<tag>.*<\/tag>/<tag>$(git rev-parse HEAD)<\/tag>
+
+/<Git-Revision>/
+s/<Git-Revision>.*<\/Git-Revision>/<Git-Revision>$(git rev-parse HEAD)<\/Git-Revision>
+wq
+EOS
+
+mvn deploy
+
+ed < bin/add-changelog-placeholders.ed
+
+git add CHANGELOG.md pom.xml
+git commit -m 'Add CHANGELOG placeholders and update pom.xml'
+git push
