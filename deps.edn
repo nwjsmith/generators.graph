@@ -3,7 +3,9 @@
  :paths ["src"]
  :aliases
  {:dev {:extra-paths ["test"]}
-  :test {:extra-deps {lambdaisland/kaocha {:mvn/version "0.0-389"}}
+  :test {:extra-deps {lambdaisland/kaocha {:mvn/version "0.0-389"}
+                      lambdaisland/kaocha-cljs {:mvn/version "0.0-16"}
+                      org.clojure/clojurescript {:mvn/version "1.10.520"}}
          :extra-paths ["test"]}
   :ci {:extra-deps {lambdaisland/kaocha-cloverage {:mvn/version "0.0-22"}
                     lambdaisland/kaocha-junit-xml {:mvn/version "0.0-53"}}}

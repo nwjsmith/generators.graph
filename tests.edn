@@ -1,0 +1,3 @@
+#kaocha/v1
+{:tests [{:id :clj :type :kaocha.type/clojure.test}
+         {:id :cljs :type :kaocha.type/cljs}]}

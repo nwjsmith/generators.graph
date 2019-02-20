@@ -28,7 +28,8 @@ orbs:
 jobs:
   build:
     docker:
-      - image: clojure:tools-deps
+      - image: circleci/clojure:tools-deps-node
+        user: root
     working_directory: /code
     steps:
       - checkout
@@ -37,6 +38,9 @@ jobs:
       - run:
           name: Download dependencies and compute CI classpath
           command: clojure -Srepro -A:test:ci -Spath
+      - run:
+          name: Install Websocket dependencies
+          command: npm install isomorphic-ws@4.0.1 ws@6.1.4
       - run:
           name: Test
           command: /code/bin/ci
