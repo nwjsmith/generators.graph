@@ -112,12 +112,9 @@ Generates a subgraph of the directed, acyclic graph. Each of the subgraph's vert
 
 [Nate Smith](http://theinternate.com)
 
-## Contribute
-
-
 ## License
 
-Copyright © 2018 Nathaniel Smith
+Copyright © 2019 Nathaniel Smith
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
 
