@@ -30,83 +30,41 @@ com.theinternate/generators.graph {:mvn/version "0.0-29"}
 
 ## Usage
 
-## API
-
-The public API is provided by the `com.theinternate.generators.graph` namespace.
-
-`(gen-directed-acyclic-graph vertices)`
-
-Generates a random directed, acyclic graph containing the given vertices.
-
-**Examples**
+Fire up a REPL and try it out!
 
 ```clojure
 (require '[clojure.test.check.generators :as gen])
 (require '[com.theinternate.generators.graph :as gen.graph])
-(gen/generate (gen.graph/gen-directed-acyclic-graph #{:a :b :c :d :e}))
-;; =>
-{:a #{:b}
- :b #{:c}
- :c #{}
- :d #{:b :c}
- :e #{}}
 ```
 
-`(gen-topological-ordering directed-acyclic-graph)`
-
-Generates a seq of all vertices in the directed, acyclic graph. The seq will be in topological order.
-
-**Examples**
+Generate a random DAG from a set of nodes:
 
 ```clojure
-(require '[clojure.test.check.generators :as gen])
-(require '[com.theinternate.generators.graph :as gen.graph])
-(gen/generate (gen.graph/gen-topological-ordering {:a #{:b}
-                                                   :b #{:c}
-                                                   :c #{}
-                                                   :d #{:b :c}
-                                                   :e #{}}))
-;; =>
-[:d :a :b :c :e]
+(gen/generate (gen.graph/gen-directed-acyclic-graph #{:a :b :c :d}))
 ```
 
-`(gen-pruned-directed-acyclic-graph directed-acyclic-graph)`
-`(gen-pruned-directed-acyclic-graph directed-acyclic-graph options)`
-
-Generates a subgraph of the directed, acyclic graph. Each of the subgraph's vertices' ancestors are also in the graph.
-
-**Options**
-
-`:minimum-vertex-count` - The minimum number of vertices generated subgraphs must contain. Default `0`.
-
-**Examples**
+Generate a random topological ordering of a DAG:
 
 ```clojure
-(require '[clojure.test.check.generators :as gen])
-(require '[com.theinternate.generators.graph :as gen.graph])
-(gen/generate (gen.graph/gen-pruned-directed-acyclic-graph {:a #{:b}
-                                                            :b #{:c}
-                                                            :c #{}
-                                                            :d #{:b :c}
-                                                            :e #{}}))
-;; =>
-{:a #{}
- :d #{}
- :e #{}}
-
-(gen/generate
-  (gen.graph/gen-pruned-directed-acyclic-graph {:a #{:b}
-                                                :b #{:c}
-                                                :c #{}
-                                                :d #{:b :c}
-                                                :e #{}}
-                                               {:minimum-vertex-count 4}))
-;; =>
-{:a #{:b}
- :b #{}
- :d #{:b}
- :e #{}}
+(gen/generate (gen.graph/gen-topological-ordering {:a #{}
+                                                   :b #{}
+                                                   :c #{:b :d}
+                                                   :d #{:a}}))
 ```
+
+Generate a pruned subgraph of a DAG:
+
+```clojure
+(gen/generate (gen.graph/gen-pruned-directed-acyclic-graph {:a #{}
+                                                            :b #{:a}
+                                                            :c #{:b :d :a}
+                                                            :d #{:b :a}
+                                                            :e #{:c :b :a}}))
+```
+
+## API reference
+
+[API reference documentation](https://cljdoc.org/d/com.theinternate/generators.graph/CURRENT) is hosted by [cljdoc](https://cljdoc.org).
 
 ## Maintainer
 
