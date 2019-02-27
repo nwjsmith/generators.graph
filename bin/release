@@ -68,3 +68,11 @@ EOS
 git add CHANGELOG.md pom.xml
 git commit -m 'Add CHANGELOG placeholders and update pom.xml'
 git push
+
+curl \
+    --silent \
+    --show-error \
+    --request POST \
+    https://cljdoc.org/api/request-build2 \
+    --data project=com.theinternate/generators.graph \
+    --data version="${VERSION}" 2>&1
