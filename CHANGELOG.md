@@ -8,11 +8,9 @@
 
 # 0.0-41 (2019-04-30 / ec7b9a9)
 
-## Added
-
-## Fixed
-
 ## Changed
+
+- Named all functions. This will cause them to show up properly in stacktraces.
 
 # 0.0-37 (2019-02-27 / 82cdcb7)
 
@@ -31,7 +29,7 @@
 ## Added
 
 - First release, with generators for DAGs, topological orderings, and pruned
-  DAGs. 
+  DAGs.
 
 ## Fixed
 
