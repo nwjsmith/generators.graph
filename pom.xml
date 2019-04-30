@@ -4,7 +4,7 @@
 
   <groupId>com.theinternate</groupId>
   <artifactId>generators.graph</artifactId>
-  <version>0.0-37</version>
+  <version>0.0-41</version>
   <name>generators.graph</name>
   <description>test.check generators for graph data</description>
   <url>https://github.com/nwjsmith/generators.graph</url>
@@ -26,7 +26,7 @@
     <connection>scm:git:https://github.com/nwjsmith/generators.graph.git</connection>
     <developerConnection>scm:git:https://github.com/nwjsmith/generators.graph.git</developerConnection>
     <url>https://github.com/nwjsmith/generators.graph</url>
-    <tag>5634574f2fd89286a9c8a2ad5d0b44abbf328ad0</tag>
+    <tag>0587e8de1c9e2d5a9303e1df64c0b37059063569</tag>
   </scm>
 
   <dependencies>
@@ -57,7 +57,7 @@
         <configuration>
           <archive>
             <manifestEntries>
-              <Git-Revision>5634574f2fd89286a9c8a2ad5d0b44abbf328ad0</Git-Revision>
+              <Git-Revision>0587e8de1c9e2d5a9303e1df64c0b37059063569</Git-Revision>
             </manifestEntries>
           </archive>
         </configuration>
