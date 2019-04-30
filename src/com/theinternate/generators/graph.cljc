@@ -8,9 +8,9 @@
   [f matrix]
   (into []
         (map-indexed
-         (fn [row-index row]
+         (fn mapped-row [row-index row]
            (into []
-                 (map-indexed (fn [column-index vertex]
+                 (map-indexed (fn mapped-vertex [column-index vertex]
                                 (f row-index column-index vertex)))
                  row)))
         matrix))
@@ -18,7 +18,8 @@
 (defn- map-vertices
   "Returns a square matrix consisting of applying f to each entry."
   [f matrix]
-  (map-vertices-indexed (fn [_ _ vertex] (f vertex)) matrix))
+  (map-vertices-indexed (fn mapped-indexed-vertex
+                          [_ _ vertex] (f vertex)) matrix))
 
 (defn- empty-matrix
   "Returns a square matrix containing an entry with a `nil` value for each of
@@ -44,7 +45,7 @@
   [vertex-count]
   (apply gen/tuple
          (map (partial apply gen/tuple)
-              (map-vertices-indexed (fn [row col _]
+              (map-vertices-indexed (fn gen-probability-of-adjacent [row col _]
                                       (if (< col row)
                                         gen-probability
                                         gen-zero-probability))
@@ -55,7 +56,7 @@
   of the graph will form a cycle. Based on the algorithm described in Cordeiro,
   Daniel et al. Random Graph Generation for Scheduling Simulations."
   [vertex-count]
-  (gen/fmap (fn [probability-matrix]
+  (gen/fmap (fn truth-table [probability-matrix]
               (map-vertices adjacent? probability-matrix))
             (gen-acyclic-probability-matrix vertex-count)))
 
@@ -63,7 +64,7 @@
   "Returns the directed graph represented by the adjacency matrix and the given
   vertices."
   [vertices matrix]
-  (reduce (fn [m [row column :as coordinates]]
+  (reduce (fn vertex-joined [m [row column :as coordinates]]
             (if (get-in matrix coordinates)
               (update m (nth vertices column) conj (nth vertices row))
               m))
@@ -75,7 +76,7 @@
 (defn gen-directed-acyclic-graph
   "Generates a random directed, acyclic graph containing the given vertices."
   [vertices]
-  (gen/fmap (fn [[shuffled-vertices matrix]]
+  (gen/fmap (fn adjacency-list [[shuffled-vertices matrix]]
               (directed-graph shuffled-vertices matrix))
             (gen/tuple (gen/shuffle vertices)
                        (gen-acyclic-adjacency-matrix (count vertices)))))
@@ -89,8 +90,9 @@
   "Returns the set of vertices in the graph which have no incoming edges."
   [directed-graph]
   (into #{}
-        (filter (fn [vertex]
-                  (not-any? (fn [adjacents] (contains? adjacents vertex))
+        (filter (fn root? [vertex]
+                  (not-any? (fn adjacent? [adjacents]
+                              (contains? adjacents vertex))
                             (vals directed-graph))))
         (vertices directed-graph)))
 
@@ -129,8 +131,8 @@
   [directed-acyclic-graph]
   (let [vertex-count (count directed-acyclic-graph)]
     (gen/fmap
-     (fn [random-indices]
-       (reduce (fn [ordered-vertices random-index]
+     (fn interchanged-at-indices [random-indices]
+       (reduce (fn interchanged-at-index [ordered-vertices random-index]
                  (let [next-index (inc random-index)]
                    (if (and (< next-index vertex-count)
                             (not (parent? directed-acyclic-graph
@@ -149,7 +151,7 @@
   (let [vertex? (set vertices)]
     (into {}
           (comp (filter (comp vertex? key))
-                (map (fn [[vertex adjacents]]
+                (map (fn entry-without-vertices [[vertex adjacents]]
                        [vertex (into #{} (filter vertex?) adjacents)])))
           directed-graph)))
 
@@ -163,7 +165,8 @@
   ([directed-acyclic-graph {:keys [minimum-vertex-count]}]
    (gen/bind
     (gen-topological-ordering directed-acyclic-graph)
-    (fn [ordering]
-      (gen/fmap #(keep-vertices (drop-last % ordering) directed-acyclic-graph)
+    (fn pruned-from-end [ordering]
+      (gen/fmap (fn vertices-removed [n]
+                  (keep-vertices (drop-last n ordering) directed-acyclic-graph))
                 (gen/choose 0 (max 0 (- (count ordering)
                                         minimum-vertex-count))))))))
