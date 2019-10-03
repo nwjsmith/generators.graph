@@ -2,7 +2,7 @@
 set -e
 
 exec clojure \
-     -A:test:ci \
+     -A:dev:ci \
     --main kaocha.runner \
     --plugin cloverage \
     --plugin kaocha.plugin/junit-xml \

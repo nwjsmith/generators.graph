@@ -1,14 +1,13 @@
-{:deps {org.clojure/clojure {:mvn/version "1.10.0"}
-        org.clojure/test.check {:mvn/version "0.9.0"}}
+{:deps {org.clojure/clojure {:mvn/version "1.10.1"}
+        org.clojure/test.check {:mvn/version "0.10.0"}}
  :paths ["src"]
  :aliases
- {:dev {:extra-paths ["test"]}
-  :test {:extra-deps {lambdaisland/kaocha {:mvn/version "0.0-389"}
-                      lambdaisland/kaocha-cljs {:mvn/version "0.0-16"}
-                      org.clojure/clojurescript {:mvn/version "1.10.520"}}
+ {:dev {:extra-deps {lambdaisland/kaocha {:mvn/version "0.0-521"}
+                     lambdaisland/kaocha-cljs {:mvn/version "0.0-32"}
+                     org.clojure/clojurescript {:mvn/version "1.10.520"}}
          :extra-paths ["test"]}
-  :ci {:extra-deps {lambdaisland/kaocha-cloverage {:mvn/version "0.0-22"}
-                    lambdaisland/kaocha-junit-xml {:mvn/version "0.0-53"}}}
+  :ci {:extra-deps {lambdaisland/kaocha-cloverage {:mvn/version "0.0-32"}
+                    lambdaisland/kaocha-junit-xml {:mvn/version "0.0-70"}}}
   :lint {:main-opts ["-m" "eastwood.lint" "{:source-paths,[\"src\",\"test\"]}"]
-         :extra-deps {jonase/eastwood {:mvn/version  "RELEASE"}}
+         :extra-deps {jonase/eastwood {:mvn/version "0.3.5"}}
          :extra-paths ["test"]}}}

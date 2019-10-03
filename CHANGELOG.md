@@ -6,6 +6,9 @@
 
 ## Changed
 
+- Updated Clojure dependency from 1.10.0 to 1.10.1
+- Updated test.check dependency from 0.9.0 to 0.10.0
+
 # 0.0-41 (2019-04-30 / ec7b9a9)
 
 ## Changed

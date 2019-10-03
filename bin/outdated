@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -e
+
+clojure \
+  -Sdeps '{:deps {olical/depot {:mvn/version "1.8.2"}}}' \
+  -A:dev:ci:lint \
+  -m depot.outdated.main
