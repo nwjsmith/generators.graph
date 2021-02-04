@@ -6,9 +6,17 @@
                      lambdaisland/kaocha-cljs {:mvn/version "0.0-71"}
                      org.clojure/clojurescript {:mvn/version "1.10.773"}}
         :extra-paths ["test"]}
-  :ci {:extra-deps {lambdaisland/kaocha-cloverage {:mvn/version "1.0.75"}}}
+  :ci {:main-opts ["-m"
+                   "kaocha.runner"
+                   "--plugin"
+                   "cloverage"
+                   "--no-cov-html"
+                   "--codecov"
+                   "--cov-fail-threshold"
+                   "99"]
+       :extra-deps {lambdaisland/kaocha-cloverage {:mvn/version "1.0.75"}}}
   :lint {:main-opts ["-m" "clj-kondo.main" "--lint" "src" "test"]
          :replace-deps {clj-kondo/clj-kondo {:mvn/version "2021.01.20"}}}
-  :test {:main-opts ["-m" kaocha.runner]}
-  :outdated {:main-opts ["-m" antq.core]
+  :test {:main-opts ["-m" "kaocha.runner"]}
+  :outdated {:main-opts ["-m" "antq.core"]
              :replace-deps {antq/antq {:mvn/version "0.10.3"}}}}}
