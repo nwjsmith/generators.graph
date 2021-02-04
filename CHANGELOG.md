@@ -1,10 +1,9 @@
 # Unreleased
 
-## Added
-
-## Fixed
-
 ## Changed
+
+- Updated Clojure dependency from 1.10.1 to 1.10.2
+- Updated test.check dependency from 0.10.0 to 1.1.0
 
 # 0.0-45 (2019-10-03 / 994c1f2)
 
