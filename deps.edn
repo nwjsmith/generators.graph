@@ -5,7 +5,7 @@
  {:dev {:extra-deps {lambdaisland/kaocha {:mvn/version "0.0-521"}
                      lambdaisland/kaocha-cljs {:mvn/version "0.0-32"}
                      org.clojure/clojurescript {:mvn/version "1.10.520"}}
-         :extra-paths ["test"]}
+        :extra-paths ["test"]}
   :ci {:extra-deps {lambdaisland/kaocha-cloverage {:mvn/version "0.0-32"}
                     lambdaisland/kaocha-junit-xml {:mvn/version "0.0-70"}}}
   :lint {:main-opts ["-m" "eastwood.lint" "{:source-paths,[\"src\",\"test\"]}"]
