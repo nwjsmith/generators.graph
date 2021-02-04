@@ -1,3 +1,4 @@
+.clj-kondo/.cache/
 .cljs_node_repl/
 .cpcache/
 node_modules/

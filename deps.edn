@@ -8,8 +8,7 @@
         :extra-paths ["test"]}
   :ci {:extra-deps {lambdaisland/kaocha-cloverage {:mvn/version "0.0-32"}
                     lambdaisland/kaocha-junit-xml {:mvn/version "0.0-70"}}}
-  :lint {:main-opts ["-m" "eastwood.lint" "{:source-paths,[\"src\",\"test\"]}"]
-         :extra-deps {jonase/eastwood {:mvn/version "0.3.5"}}
-         :extra-paths ["test"]}
+  :lint {:main-opts ["-m" "clj-kondo.main" "--lint" "src" "test"]
+         :extra-deps {clj-kondo/clj-kondo {:mvn/version "2021.01.20"}}}
   :outdated {:main-opts ["-m" "antq.core"]
              :extra-deps {antq/antq {:mvn/version "0.10.3"}}}}}
