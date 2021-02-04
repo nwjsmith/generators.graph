@@ -10,4 +10,6 @@
                     lambdaisland/kaocha-junit-xml {:mvn/version "0.0-70"}}}
   :lint {:main-opts ["-m" "eastwood.lint" "{:source-paths,[\"src\",\"test\"]}"]
          :extra-deps {jonase/eastwood {:mvn/version "0.3.5"}}
-         :extra-paths ["test"]}}}
+         :extra-paths ["test"]}
+  :outdated {:main-opts ["-m" "antq.core"]
+             :extra-deps {antq/antq {:mvn/version "0.10.3"}}}}}

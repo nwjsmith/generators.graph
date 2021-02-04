@@ -1,7 +1,0 @@
-#!/bin/bash
-
-set -e
-
-clojure \
-  -Sdeps '{:deps {antq/antq {:mvn/version "RELEASE"}}}' \
-  -m antq.core
