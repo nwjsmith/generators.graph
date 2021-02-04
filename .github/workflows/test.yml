@@ -4,19 +4,19 @@ on:
 jobs:
   test:
     runs-on: ubuntu-20.04
-  steps:
-    - uses: actions/checkout@v2
-    - uses: DeLaGuardo/setup-clojure@v3.1
-      with:
-        cli: 1.10.2.774
-    - run: |
-        clojure \
-            -M:dev:ci:test \
-            --plugin cloverage \
-            --plugin kaocha.plugin/junit-xml \
-            --no-cov-html \
-            --codecov \
-            --cov-fail-threshold 99 \
-    - uses: codecov-action@v1
-      with:
-        files: ./target/coverage/codecov.json
+    steps:
+      - uses: actions/checkout@v2
+      - uses: DeLaGuardo/setup-clojure@v3.1
+        with:
+          cli: 1.10.2.774
+      - run: |
+          clojure \
+              -M:dev:ci:test \
+              --plugin cloverage \
+              --plugin kaocha.plugin/junit-xml \
+              --no-cov-html \
+              --codecov \
+              --cov-fail-threshold 99 \
+      - uses: codecov-action@v1
+        with:
+          files: ./target/coverage/codecov.json
