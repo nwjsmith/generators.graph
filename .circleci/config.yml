@@ -64,7 +64,6 @@ jobs:
       - *save-maven-local-repository
 
 workflows:
-  version: 2
   pipeline:
     jobs:
       - build:
