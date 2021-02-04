@@ -1,6 +1,6 @@
 # generators.graph
 
-[![CircleCI](https://circleci.com/gh/nwjsmith/generators.graph.svg?style=svg)](https://circleci.com/gh/nwjsmith/generators.graph) [![cljdoc badge](https://cljdoc.org/badge/com.theinternate/generators.graph)](https://cljdoc.org/d/com.theinternate/generators.graph) [![Clojars Project](https://img.shields.io/clojars/v/com.theinternate/generators.graph.svg)](https://clojars.org/com.theinternate/generators.graph) [![codecov](https://codecov.io/gh/nwjsmith/generators.graph/branch/master/graph/badge.svg)](https://codecov.io/gh/nwjsmith/generators.graph)
+[![GitHub Actions badge](https://github.com/nwjsmith/generators.graph/workflows/Test/badge.svg)](https://github.com/nwjsmith/generators.graph/actions?query=workflow%3ATest+branch%3Amaster) [![cljdoc badge](https://cljdoc.org/badge/com.theinternate/generators.graph)](https://cljdoc.org/d/com.theinternate/generators.graph) [![Clojars Project](https://img.shields.io/clojars/v/com.theinternate/generators.graph.svg)](https://clojars.org/com.theinternate/generators.graph) [![Codecov badge](https://codecov.io/gh/nwjsmith/generators.graph/branch/master/graph/badge.svg)](https://codecov.io/gh/nwjsmith/generators.graph)
 
 `generators.graph` is a Clojure(Script) library of [`test.check`](https://github.com/clojure/test.check) generators for graph data.
 
