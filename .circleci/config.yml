@@ -36,7 +36,7 @@ jobs:
       - *restore-maven-local-repository
       - *restore-classpath-cache-directory
       - run:
-          name: Download dependencies and compute CI classpath
+          name: Download dependencies
           command: clojure -A:dev:ci -P
       - run:
           name: Install Node.js test dependencies
