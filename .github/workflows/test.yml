@@ -17,6 +17,6 @@ jobs:
               --no-cov-html \
               --codecov \
               --cov-fail-threshold 99 \
-      - uses: codecov-action@v1
+      - uses: codecov/codecov-action@v1
         with:
           files: ./target/coverage/codecov.json
