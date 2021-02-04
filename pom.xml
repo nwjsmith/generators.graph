@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-
   <groupId>com.theinternate</groupId>
   <artifactId>generators.graph</artifactId>
   <version>0.0-45</version>
@@ -9,39 +8,34 @@
   <description>test.check generators for graph data</description>
   <url>https://github.com/nwjsmith/generators.graph</url>
   <inceptionYear>2018</inceptionYear>
-
   <licenses>
     <license>
       <name>Apache License 2.0</name>
       <url>https://opensource.org/licenses/Apache-2.0</url>
     </license>
   </licenses>
-
   <organization>
     <name>The Internate</name>
     <url>theinternate.com</url>
   </organization>
-
   <scm>
     <connection>scm:git:https://github.com/nwjsmith/generators.graph.git</connection>
     <developerConnection>scm:git:https://github.com/nwjsmith/generators.graph.git</developerConnection>
     <url>https://github.com/nwjsmith/generators.graph</url>
     <tag>32a473a2d48ac1483bb8bcd65bf80249b13cc693</tag>
   </scm>
-
   <dependencies>
     <dependency>
       <groupId>org.clojure</groupId>
       <artifactId>clojure</artifactId>
-      <version>1.10.1</version>
+      <version>1.10.2</version>
     </dependency>
     <dependency>
       <groupId>org.clojure</groupId>
       <artifactId>test.check</artifactId>
-      <version>0.10.0</version>
+      <version>1.1.0</version>
     </dependency>
   </dependencies>
-
   <build>
     <sourceDirectory>src</sourceDirectory>
     <resources>

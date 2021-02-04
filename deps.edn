@@ -1,13 +1,13 @@
-{:deps {org.clojure/clojure {:mvn/version "1.10.1"}
-        org.clojure/test.check {:mvn/version "0.10.0"}}
+{:deps {org.clojure/clojure {:mvn/version "1.10.2"}
+        org.clojure/test.check {:mvn/version "1.1.0"}}
  :paths ["src"]
  :aliases
  {:dev {:extra-deps {lambdaisland/kaocha {:mvn/version "1.0.732"}
                      lambdaisland/kaocha-cljs {:mvn/version "0.0-71"}
-                     org.clojure/clojurescript {:mvn/version "1.10.520"}}
+                     org.clojure/clojurescript {:mvn/version "1.10.773"}}
         :extra-paths ["test"]}
-  :ci {:extra-deps {lambdaisland/kaocha-cloverage {:mvn/version "0.0-32"}
-                    lambdaisland/kaocha-junit-xml {:mvn/version "0.0-70"}}}
+  :ci {:extra-deps {lambdaisland/kaocha-cloverage {:mvn/version "1.0.75"}
+                    lambdaisland/kaocha-junit-xml {:mvn/version "0.0.76"}}}
   :lint {:main-opts ["-m" "clj-kondo.main" "--lint" "src" "test"]
          :extra-deps {clj-kondo/clj-kondo {:mvn/version "2021.01.20"}}}
   :test {:main-opts ["-m" kaocha.runner]}
