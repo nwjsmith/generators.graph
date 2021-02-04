@@ -1,0 +1,6 @@
+{
+  "private": true,
+  "dependencies": {
+    "ws": "^7.4.3"
+  }
+}
