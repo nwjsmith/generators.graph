@@ -11,9 +11,7 @@ jobs:
           cli: 1.10.2.774
       - uses: actions/setup-node@v2
       - run: npm install
-      - run: |
-          clojure \
-              -M:dev:ci
+      - run: clojure -M:dev:ci
       - uses: codecov/codecov-action@v1
         with:
           files: ./target/coverage/codecov.json
