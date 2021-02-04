@@ -13,7 +13,6 @@ jobs:
           clojure \
               -M:dev:ci:test \
               --plugin cloverage \
-              --plugin kaocha.plugin/junit-xml \
               --no-cov-html \
               --codecov \
               --cov-fail-threshold 99 \
