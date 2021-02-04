@@ -6,7 +6,7 @@
 (defn- sample-set
   "Returns the set of values realized from a sampling the generator 1000 times."
   [gen]
-  (set (gen/sample gen 1000)))
+  (set (gen/sample gen 2048)))
 
 (deftest gen-directed-acyclic-graph-test
   (is (= #{{:a #{} :b #{} :c #{}}
