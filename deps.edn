@@ -9,7 +9,7 @@
   :ci {:extra-deps {lambdaisland/kaocha-cloverage {:mvn/version "1.0.75"}
                     lambdaisland/kaocha-junit-xml {:mvn/version "0.0.76"}}}
   :lint {:main-opts ["-m" "clj-kondo.main" "--lint" "src" "test"]
-         :extra-deps {clj-kondo/clj-kondo {:mvn/version "2021.01.20"}}}
+         :replace-deps {clj-kondo/clj-kondo {:mvn/version "2021.01.20"}}}
   :test {:main-opts ["-m" kaocha.runner]}
   :outdated {:main-opts ["-m" antq.core]
              :replace-deps {antq/antq {:mvn/version "0.10.3"}}}}}
