@@ -98,3 +98,34 @@
                                                                    :d #{}
                                                                    :e #{:f}
                                                                    :f #{}})))))
+
+(defn- has-cycle?
+  "Returns true if the directed graph contains at least one cycle."
+  [graph]
+  (letfn [(visit [node visited path]
+            (cond
+              (contains? path node) true
+              (contains? visited node) false
+              :else (let [neighbors (keys (filter (fn [[_ deps]] (contains? deps node)) graph))]
+                      (some #(visit % (conj visited node) (conj path node)) neighbors))))]
+    (some #(visit % #{} #{}) (keys graph))))
+
+(deftest gen-directed-graph-test
+  (let [samples (sample-set (gen.graph/gen-directed-graph [:a :b]))]
+    ;; All graphs should have exactly the specified vertices
+    (is (every? #(= #{:a :b} (set (keys %))) samples))
+    ;; Should generate graphs with cycles (self-loops or mutual dependencies)
+    ;; With 2048 samples, we should see graphs with cycles
+    (is (some has-cycle? samples))
+    ;; Should include the empty graph (no edges)
+    (is (contains? samples {:a #{} :b #{}}))
+    ;; Should include graphs with edges
+    (is (some #(not= % {:a #{} :b #{}}) samples))))
+
+(deftest gen-directed-graph-includes-cycles-test
+  ;; With 3 vertices, explicitly test that we can generate cyclic graphs
+  (let [samples (sample-set (gen.graph/gen-directed-graph [:a :b :c]))]
+    ;; Verify we generate graphs with cycles
+    (is (some has-cycle? samples))
+    ;; All graphs should have all three vertices
+    (is (every? #(= #{:a :b :c} (set (keys %))) samples))))

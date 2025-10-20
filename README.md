@@ -37,6 +37,12 @@ Fire up a REPL and try it out!
 (require '[com.theinternate.generators.graph :as gen.graph])
 ```
 
+Generate a random directed graph (may contain cycles) from a set of nodes:
+
+```clojure
+(gen/generate (gen.graph/gen-directed-graph #{:a :b :c :d}))
+```
+
 Generate a random DAG from a set of nodes:
 
 ```clojure

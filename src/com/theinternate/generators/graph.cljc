@@ -81,6 +81,36 @@
             (gen/tuple (gen/shuffle vertices)
                        (gen-acyclic-adjacency-matrix (count vertices)))))
 
+(defn- gen-probability-matrix
+  "Generates a matrix containing a probability of there being an edge between
+  two vertices. The generated matrix may contain cycles. It will contain
+  entries for the given number of vertices."
+  [vertex-count]
+  (apply gen/tuple
+         (map (partial apply gen/tuple)
+              (map-vertices-indexed (fn gen-probability-of-adjacent [row col _]
+                                      (if (= row col)
+                                        gen-zero-probability
+                                        gen-probability))
+                                    (empty-matrix vertex-count)))))
+
+(defn- gen-adjacency-matrix
+  "Generates an adjacency matrix for the given number of vertices. Edges
+  may form cycles."
+  [vertex-count]
+  (gen/fmap (fn truth-table [probability-matrix]
+              (map-vertices adjacent? probability-matrix))
+            (gen-probability-matrix vertex-count)))
+
+(defn gen-directed-graph
+  "Generates a random directed graph containing the given vertices. The graph
+  may contain cycles."
+  [vertices]
+  (gen/fmap (fn adjacency-list [[shuffled-vertices matrix]]
+              (directed-graph shuffled-vertices matrix))
+            (gen/tuple (gen/shuffle vertices)
+                       (gen-adjacency-matrix (count vertices)))))
+
 (defn- vertices
   "Returns a set containing all of the directed graph's vertices."
   [directed-graph]
