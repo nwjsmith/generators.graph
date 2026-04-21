@@ -36,6 +36,24 @@
            {:a #{:b :c} :b #{:c} :c #{}}}
          (sample-set (gen.graph/gen-directed-acyclic-graph [:a :b :c])))))
 
+(deftest gen-directed-graph-test
+  (is (= #{{:a #{} :b #{}}
+           {:a #{:b} :b #{}}
+           {:a #{} :b #{:a}}
+           {:a #{:b} :b #{:a}}}
+         (sample-set (gen.graph/gen-directed-graph [:a :b])))))
+
+(deftest gen-undirected-graph-test
+  (is (= #{{:a #{} :b #{} :c #{}}
+           {:a #{:b} :b #{:a} :c #{}}
+           {:a #{:c} :b #{} :c #{:a}}
+           {:a #{} :b #{:c} :c #{:b}}
+           {:a #{:b :c} :b #{:a} :c #{:a}}
+           {:a #{:b} :b #{:a :c} :c #{:b}}
+           {:a #{:c} :b #{:c} :c #{:a :b}}
+           {:a #{:b :c} :b #{:a :c} :c #{:a :b}}}
+         (sample-set (gen.graph/gen-undirected-graph [:a :b :c])))))
+
 (deftest gen-topological-ordering-test
   (is (= #{[:a :b :c :d :e :f]
            [:a :b :c :e :d :f]

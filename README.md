@@ -43,6 +43,18 @@ Generate a random DAG from a set of nodes:
 (gen/generate (gen.graph/gen-directed-acyclic-graph #{:a :b :c :d}))
 ```
 
+Generate a random directed graph (which may contain cycles):
+
+```clojure
+(gen/generate (gen.graph/gen-directed-graph #{:a :b :c :d}))
+```
+
+Generate a random undirected graph:
+
+```clojure
+(gen/generate (gen.graph/gen-undirected-graph #{:a :b :c :d}))
+```
+
 Generate a random topological ordering of a DAG:
 
 ```clojure

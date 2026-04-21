@@ -1,5 +1,11 @@
 # Unreleased
 
+## Added
+
+- `gen-directed-graph` generator for random directed graphs, which may contain
+  cycles.
+- `gen-undirected-graph` generator for random undirected graphs.
+
 ## Changed
 
 - Updated Clojure dependency from 1.10.1 to 1.10.2
