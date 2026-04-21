@@ -97,7 +97,28 @@
                     (+ (mean counts) (* 3 deviation)))
                 counts))))
 
-(deftest gen-pruned-directed-acyclic-graph-test
+(deftest gen-weighted-test
+  (let [graph {:a #{} :b #{:a} :c #{:a :b}}
+        samples (gen/sample (gen.graph/gen-weighted graph) 2048)]
+    (is (every? #(= (set (keys %)) #{:a :b :c}) samples))
+    (is (every? (fn adjacents-preserved [w]
+                  (and (= #{} (set (keys (:a w))))
+                       (= #{:a} (set (keys (:b w))))
+                       (= #{:a :b} (set (keys (:c w))))))
+                samples))
+    (is (every? (fn weights-in-unit-interval [w]
+                  (every? #(<= 0.0 % 1.0) (mapcat vals (vals w))))
+                samples))))
+
+(deftest gen-ancestor-closed-subgraph-preserves-weights-test
+  (is (= #{{}
+           {:a {}}
+           {:a {:b 0.5} :b {}}
+           {:a {:b 0.5} :b {:c 0.75} :c {}}}
+         (sample-set (gen.graph/gen-ancestor-closed-subgraph
+                      {:a {:b 0.5} :b {:c 0.75} :c {}})))))
+
+(deftest gen-ancestor-closed-subgraph-test
   (is (= #{{}
            {:a #{}}
            {:a #{:b} :b #{}}
@@ -110,9 +131,13 @@
            {:a #{:b :c} :b #{:d} :c #{:d} :d #{}}
            {:a #{:b :c} :b #{:d} :c #{:d :e} :d #{} :e #{}}
            {:a #{:b :c} :b #{:d} :c #{:e :d} :d #{} :e #{:f} :f #{}}}
-         (sample-set (gen.graph/gen-pruned-directed-acyclic-graph {:a #{:b :c}
-                                                                   :b #{:d}
-                                                                   :c #{:d :e}
-                                                                   :d #{}
-                                                                   :e #{:f}
-                                                                   :f #{}})))))
+         (sample-set (gen.graph/gen-ancestor-closed-subgraph {:a #{:b :c}
+                                                              :b #{:d}
+                                                              :c #{:d :e}
+                                                              :d #{}
+                                                              :e #{:f}
+                                                              :f #{}})))))
+
+(deftest gen-pruned-directed-acyclic-graph-alias-test
+  (is (identical? gen.graph/gen-ancestor-closed-subgraph
+                  gen.graph/gen-pruned-directed-acyclic-graph)))

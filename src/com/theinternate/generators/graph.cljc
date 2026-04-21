@@ -2,7 +2,7 @@
   (:require [clojure.set :as set]
             [clojure.test.check.generators :as gen]))
 
-(defn- map-vertices-indexed
+(defn- map-matrix-indexed
   "Returns a matrix consisting applying f to each entry, its row coordinate, and
   its column coordinate."
   [f matrix]
@@ -15,10 +15,10 @@
                  row)))
         matrix))
 
-(defn- map-vertices
+(defn- map-matrix
   "Returns a square matrix consisting of applying f to each entry."
   [f matrix]
-  (map-vertices-indexed (fn mapped-indexed-vertex
+  (map-matrix-indexed (fn mapped-indexed-vertex
                           [_ _ vertex] (f vertex)) matrix))
 
 (defn- empty-matrix
@@ -33,8 +33,8 @@
 (def ^:private gen-zero-probability
   (gen/return 0.0))
 
-(defn- adjacent?
-  "Returns true if the probability indicates the vertices are adjacent"
+(defn- edge?
+  "Returns true if the probability indicates the vertices are adjacent."
   [probability]
   (< 0.5 probability))
 
@@ -58,7 +58,7 @@
   [vertex-count gen-cell]
   (apply gen/tuple
          (map (partial apply gen/tuple)
-              (map-vertices-indexed (fn gen-probability-at [row col _]
+              (map-matrix-indexed (fn gen-probability-at [row col _]
                                       (gen-cell row col))
                                     (empty-matrix vertex-count)))))
 
@@ -66,7 +66,7 @@
   "Returns the matrix with its lower triangle mirrored into its upper
   triangle."
   [matrix]
-  (map-vertices-indexed (fn mirror-upper [row col vertex]
+  (map-matrix-indexed (fn mirror-upper [row col vertex]
                           (if (< row col)
                             (get-in matrix [col row])
                             vertex))
@@ -78,10 +78,10 @@
   Generation for Scheduling Simulations."
   [gen-probability-matrix]
   (gen/fmap (fn truth-table [probability-matrix]
-              (map-vertices adjacent? probability-matrix))
+              (map-matrix edge? probability-matrix))
             gen-probability-matrix))
 
-(defn- directed-graph
+(defn- graph
   "Returns the directed graph represented by the adjacency matrix and the given
   vertices."
   [vertices matrix]
@@ -98,7 +98,7 @@
   "Generates a random directed, acyclic graph containing the given vertices."
   [vertices]
   (gen/fmap (fn adjacency-list [[shuffled-vertices matrix]]
-              (directed-graph shuffled-vertices matrix))
+              (graph shuffled-vertices matrix))
             (gen/tuple (gen/shuffle vertices)
                        (gen-adjacency-matrix
                         (gen-probability-matrix (count vertices)
@@ -109,7 +109,7 @@
   may contain cycles."
   [vertices]
   (gen/fmap (fn adjacency-list [[shuffled-vertices matrix]]
-              (directed-graph shuffled-vertices matrix))
+              (graph shuffled-vertices matrix))
             (gen/tuple (gen/shuffle vertices)
                        (gen-adjacency-matrix
                         (gen-probability-matrix (count vertices)
@@ -119,7 +119,7 @@
   "Generates a random undirected graph containing the given vertices."
   [vertices]
   (gen/fmap (fn adjacency-list [[shuffled-vertices matrix]]
-              (directed-graph shuffled-vertices matrix))
+              (graph shuffled-vertices matrix))
             (gen/tuple (gen/shuffle vertices)
                        (gen-adjacency-matrix
                         (gen/fmap symmetrical
@@ -137,7 +137,7 @@
   [directed-graph]
   (into #{}
         (filter (fn root? [vertex]
-                  (not-any? (fn adjacent? [adjacents]
+                  (not-any? (fn contains-vertex? [adjacents]
                               (contains? adjacents vertex))
                             (vals directed-graph))))
         (vertices directed-graph)))
@@ -192,22 +192,27 @@
                  (* 10 (Math/pow vertex-count 2))))))
 
 (defn- keep-vertices
-  "Returns a directed graph containing only the given vertices."
+  "Returns a directed graph containing only the given vertices. Preserves the
+  adjacency container type, so edges decorated with weights or other values
+  are retained."
   [vertices directed-graph]
   (let [vertex? (set vertices)]
     (into {}
           (comp (filter (comp vertex? key))
                 (map (fn entry-without-vertices [[vertex adjacents]]
-                       [vertex (into #{} (filter vertex?) adjacents)])))
+                       [vertex (if (map? adjacents)
+                                 (into {} (filter (comp vertex? key)) adjacents)
+                                 (into #{} (filter vertex?) adjacents))])))
           directed-graph)))
 
-(defn gen-pruned-directed-acyclic-graph
-  "Generates a subgraph of the directed, acyclic graph. Each of the subgraph's
-  vertices' ancestors are also in the graph. The subgraph will contain at least
-  the minimum number of vertices (default 0)."
+(defn gen-ancestor-closed-subgraph
+  "Generates an ancestor-closed subgraph of the directed, acyclic graph: a
+  subset of its vertices closed under the ancestor relation, so including a
+  vertex implies including all of its ancestors. The subgraph will contain at
+  least the minimum number of vertices (default 0)."
   ([directed-acyclic-graph]
-   (gen-pruned-directed-acyclic-graph directed-acyclic-graph
-                                      {:minimum-vertex-count 0}))
+   (gen-ancestor-closed-subgraph directed-acyclic-graph
+                                 {:minimum-vertex-count 0}))
   ([directed-acyclic-graph {:keys [minimum-vertex-count]}]
    (gen/bind
     (gen-topological-ordering directed-acyclic-graph)
@@ -216,3 +221,24 @@
                   (keep-vertices (drop-last n ordering) directed-acyclic-graph))
                 (gen/choose 0 (max 0 (- (count ordering)
                                         minimum-vertex-count))))))))
+
+(def ^{:deprecated true
+       :doc "Deprecated alias for gen-ancestor-closed-subgraph."
+       :arglists '([directed-acyclic-graph]
+                   [directed-acyclic-graph {:keys [minimum-vertex-count]}])}
+  gen-pruned-directed-acyclic-graph gen-ancestor-closed-subgraph)
+
+(defn gen-weighted
+  "Generates a weighted version of the directed graph. Each edge is assigned a
+  weight between 0.0 and 1.0. The weighted graph is represented as a map from
+  each vertex to a map from its adjacents to their weights."
+  [directed-graph]
+  (let [edges (for [[vertex adjacents] directed-graph
+                    adjacent adjacents]
+                [vertex adjacent])]
+    (gen/fmap (fn weighted-edges [weights]
+                (reduce (fn weight-assigned [weighted [[vertex adjacent] weight]]
+                          (update weighted vertex assoc adjacent weight))
+                        (zipmap (keys directed-graph) (repeat {}))
+                        (map vector edges weights)))
+              (gen/vector gen-probability (count edges)))))

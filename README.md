@@ -64,14 +64,25 @@ Generate a random topological ordering of a DAG:
                                                    :d #{:a}}))
 ```
 
-Generate a pruned subgraph of a DAG:
+Generate a weighted graph by decorating an existing graph's edges with
+weights between 0.0 and 1.0. Composes with any of the graph generators
+above:
 
 ```clojure
-(gen/generate (gen.graph/gen-pruned-directed-acyclic-graph {:a #{}
-                                                            :b #{:a}
-                                                            :c #{:b :d :a}
-                                                            :d #{:b :a}
-                                                            :e #{:c :b :a}}))
+(gen/generate
+ (gen/bind (gen.graph/gen-directed-acyclic-graph #{:a :b :c :d})
+           gen.graph/gen-weighted))
+```
+
+Generate an ancestor-closed subgraph of a DAG — a subset whose vertices are
+closed under the ancestor relation:
+
+```clojure
+(gen/generate (gen.graph/gen-ancestor-closed-subgraph {:a #{}
+                                                       :b #{:a}
+                                                       :c #{:b :d :a}
+                                                       :d #{:b :a}
+                                                       :e #{:c :b :a}}))
 ```
 
 ## API reference
