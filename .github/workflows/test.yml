@@ -4,6 +4,9 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
     steps:
       - uses: actions/checkout@v6
       - uses: DeLaGuardo/setup-clojure@13.6.0
@@ -16,4 +19,5 @@ jobs:
       - run: clojure -M:cljs-test
       - uses: codecov/codecov-action@v6
         with:
+          use_oidc: true
           files: ./target/coverage/codecov.json
