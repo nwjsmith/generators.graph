@@ -28,7 +28,8 @@
   (vec (repeat vertex-count (vec (repeat vertex-count nil)))))
 
 (def ^:private gen-probability
-  (gen/double* {:min 0.0 :max 1.0 :NaN? false}))
+  (gen/fmap (fn uniform-unit [n] (/ (double n) 1.0e9))
+            (gen/choose 0 1000000000)))
 
 (def ^:private gen-zero-probability
   (gen/return 0.0))
@@ -230,7 +231,7 @@
 
 (defn gen-weighted
   "Generates a weighted version of the directed graph. Each edge is assigned a
-  weight between 0.0 and 1.0. The weighted graph is represented as a map from
+  non-negative integer weight. The weighted graph is represented as a map from
   each vertex to a map from its adjacents to their weights."
   [directed-graph]
   (let [edges (for [[vertex adjacents] directed-graph
@@ -241,4 +242,4 @@
                           (update weighted vertex assoc adjacent weight))
                         (zipmap (keys directed-graph) (repeat {}))
                         (map vector edges weights)))
-              (gen/vector gen-probability (count edges)))))
+              (gen/vector gen/nat (count edges)))))

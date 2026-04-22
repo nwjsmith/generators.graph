@@ -6,7 +6,15 @@
   cycles.
 - `gen-undirected-graph` generator for random undirected graphs.
 - `gen-weighted` generator that decorates the edges of a graph with
-  weights between 0.0 and 1.0.
+  non-negative integer weights.
+
+## Fixed
+
+- Edge probabilities are now sampled uniformly from [0.0, 1.0]. Previously
+  the underlying `gen/double*` biased heavily toward small values, which
+  made generated graphs skew sparse — e.g., the fully-connected directed
+  graph on three vertices occurred with probability ~10⁻⁸ instead of the
+  intended 1/64.
 
 ## Changed
 

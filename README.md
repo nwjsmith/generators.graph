@@ -65,7 +65,7 @@ Generate a random topological ordering of a DAG:
 ```
 
 Generate a weighted graph by decorating an existing graph's edges with
-weights between 0.0 and 1.0. Composes with any of the graph generators
+non-negative integer weights. Composes with any of the graph generators
 above:
 
 ```clojure
