@@ -2,21 +2,20 @@
         org.clojure/test.check {:mvn/version "1.1.1"}}
  :paths ["src"]
  :aliases
- {:dev {:extra-deps {lambdaisland/kaocha {:mvn/version "1.91.1392"}
-                     lambdaisland/kaocha-cljs {:mvn/version "1.9.181"}
-                     org.clojure/clojurescript {:mvn/version "1.12.42"}}
-        :extra-paths ["test"]}
-  :ci {:main-opts ["-m"
-                   "kaocha.runner"
-                   "--plugin"
-                   "cloverage"
-                   "--no-cov-html"
-                   "--codecov"
-                   "--cov-fail-threshold"
-                   "99"]
-       :extra-deps {lambdaisland/kaocha-cloverage {:mvn/version "1.1.89"}}}
+ {:test {:extra-paths ["test"]
+         :extra-deps {io.github.cognitect-labs/test-runner
+                      {:git/tag "v0.5.1" :git/sha "dfb30dd"}}
+         :main-opts ["-m" "cognitect.test-runner"]}
+  :cljs-test {:extra-paths ["test"]
+              :extra-deps {olical/cljs-test-runner {:mvn/version "3.8.1"}
+                           org.clojure/clojurescript {:mvn/version "1.12.42"}}
+              :main-opts ["-m" "cljs-test-runner.main" "-d" "test"]}
+  :coverage {:extra-paths ["test"]
+             :extra-deps {cloverage/cloverage {:mvn/version "1.2.4"}}
+             :main-opts ["-m" "cloverage.coverage"
+                         "-p" "src" "-s" "test"
+                         "--codecov" "--fail-threshold" "99"]}
   :lint {:main-opts ["-m" "clj-kondo.main" "--lint" "src" "test"]
          :replace-deps {clj-kondo/clj-kondo {:mvn/version "2026.04.15"}}}
-  :test {:main-opts ["-m" "kaocha.runner"]}
   :outdated {:main-opts ["-m" "antq.core"]
              :replace-deps {antq/antq {:mvn/version "2.11.1276"}}}}}

@@ -12,8 +12,8 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: lts/*
-      - run: npm install
-      - run: clojure -M:dev:ci
+      - run: clojure -M:coverage
+      - run: clojure -M:cljs-test
       - uses: codecov/codecov-action@v6
         with:
           files: ./target/coverage/codecov.json
