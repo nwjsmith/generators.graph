@@ -297,4 +297,5 @@
 
 (deftest gen-pruned-directed-acyclic-graph-alias-test
   (is (identical? gen.graph/gen-ancestor-closed-subgraph
+                  #_{:clj-kondo/ignore [:deprecated-var]}
                   gen.graph/gen-pruned-directed-acyclic-graph)))
