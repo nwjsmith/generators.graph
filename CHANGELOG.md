@@ -15,6 +15,9 @@
   made generated graphs skew sparse — e.g., the fully-connected directed
   graph on three vertices occurred with probability ~10⁻⁸ instead of the
   intended 1/64.
+- `gen-ancestor-closed-subgraph` now shrinks toward the smallest allowed
+  subgraph (or `:minimum-vertex-count`) rather than toward the full input
+  graph, so failing cases minimize to a small counterexample.
 
 ## Changed
 

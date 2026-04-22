@@ -217,11 +217,12 @@
   ([directed-acyclic-graph {:keys [minimum-vertex-count]}]
    (gen/bind
     (gen-topological-ordering directed-acyclic-graph)
-    (fn pruned-from-end [ordering]
-      (gen/fmap (fn vertices-removed [n]
-                  (keep-vertices (drop-last n ordering) directed-acyclic-graph))
-                (gen/choose 0 (max 0 (- (count ordering)
-                                        minimum-vertex-count))))))))
+    (fn kept-from-start [ordering]
+      (let [vertex-count (count ordering)]
+        (gen/fmap (fn vertices-kept [n]
+                    (keep-vertices (take n ordering) directed-acyclic-graph))
+                  (gen/choose (min minimum-vertex-count vertex-count)
+                              vertex-count)))))))
 
 (def ^{:deprecated true
        :doc "Deprecated alias for gen-ancestor-closed-subgraph."
